@@ -1,3 +1,5 @@
+
+package com.example.chatapplication.presentation.ui
 import androidx.compose.foundation.layout.*
 import android.annotation.SuppressLint
 import android.os.Build
