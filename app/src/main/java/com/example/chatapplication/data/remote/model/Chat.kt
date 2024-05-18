@@ -1,4 +1,4 @@
-package com.example.chatapplication.data.model
+package com.example.chatapplication.data.remote.model
 
 import android.graphics.Bitmap
 

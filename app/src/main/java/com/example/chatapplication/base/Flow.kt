@@ -8,18 +8,18 @@ import retrofit2.Response
 
 fun <T> apiFlow(
     call:suspend () -> Response<T>?
-): Flow<ApiResult<T>> = flow {
-    emit(ApiResult.Loading)
+): Flow<BaseResult<T & Any>?> = flow {
+    emit(BaseResult.Loading)
     try {
         val c = call()
         c?.let {
             if (c.isSuccessful) {
-                emit(ApiResult.Success(c.body()))
+                emit(c.body()?.let { it1 -> BaseResult.Success(it1) })
             } else {
-                emit(ApiResult.Error(c.errorBody()?.string() ?: "An error bidi bidi"))
+                emit(BaseResult.Error(c.errorBody()?.string() ?: "An error"))
             }
         }
     } catch (e: Exception) {
-        emit(ApiResult.Error(e.message ?: "An error bidi bidi"))
+        emit(BaseResult.Error(e.message ?: "An error"))
     }
 }.flowOn(Dispatchers.IO)
