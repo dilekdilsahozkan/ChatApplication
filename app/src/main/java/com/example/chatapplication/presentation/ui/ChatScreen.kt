@@ -183,10 +183,10 @@ fun ChatInputBar(message: String, onValueChange: (String) -> Unit, onSend: (Stri
                 disabledIndicatorColor = Color("#F9D8D8".toColorInt()),
 
                 ),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Send
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+            keyboardActions = KeyboardActions(
+                onSend = { onSend(message) }
             ),
-            keyboardActions = KeyboardActions(onSend = { onSend(message) }),
             leadingIcon = {
                 IconButton(
                     onClick = { /* Kamera butonu click eventi içeriği */ },
