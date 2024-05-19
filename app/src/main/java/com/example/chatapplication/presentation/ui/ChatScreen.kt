@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +26,9 @@ import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -37,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -70,113 +74,105 @@ fun ChatScreen() {
 
     Scaffold(
         topBar = {
-            Box(
-                modifier = Modifier
-                    .padding(end = 16.dp, top = 8.dp)
-                    .fillMaxWidth()
-                    .background(Color.Transparent)
+            TopAppBar(
+                modifier = Modifier.padding(16.dp),
+                title = { Text(text = "Chat", fontWeight = FontWeight.Bold) },
+                colors = TopAppBarDefaults.topAppBarColors(Color.Transparent) ,
+                navigationIcon = {
+                    IconButton(
+                        onClick = { /* Handle navigation drawer */ },
+                        modifier = Modifier
+                            .size(48.dp)
+                            .background(
+                                Color("#F9D8D8".toColorInt()),
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                    ) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = "Menu",
+                            tint = Color("#E23E3E".toColorInt())
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = { /* Handle search */ },
+                        modifier = Modifier
+                            .size(48.dp)
+                            .background(
+                                Color("#F9D8D8".toColorInt()),
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                    ) {
+                        Icon(
+                            Icons.Default.Notifications,
+                            contentDescription = "Search",
+                            tint = Color("#E23E3E".toColorInt())
+                        )
+                    }
+                },
+            )
 
-            ) {
-                TopAppBar(
-                    title = { Text(text = "Chat", fontWeight = FontWeight.Bold) },
-                    navigationIcon = {
+        },
+        bottomBar = {
+            ProvideTextStyle(TextStyle(color = Color.Black)) {
+                TextField(
+                    value = messageText,
+                    onValueChange = { messageText = it },
+                    colors = TextFieldDefaults.colors(unfocusedContainerColor = Color("#F9D8D8".toColorInt()),
+                        focusedContainerColor = Color("#F9D8D8".toColorInt()) ) ,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Send
+                    ),
+                    keyboardActions = KeyboardActions(onSend = {
+                        if (messageText.isNotBlank()) {
+                            messages.add(Message(messageText, currentTime))
+                            messageText = ""
+                        }
+                    }),
+                    modifier = Modifier
+                        .padding(end = 4.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Black),
+                    leadingIcon = {
                         IconButton(
-                            onClick = { /* Handle navigation drawer */ },
+                            onClick = {
+                                // Handle camera/gallery action here
+                            },
                             modifier = Modifier
-                                .size(48.dp)
-                                .background(
-                                    Color("#F9D8D8".toColorInt()),
-                                    shape = RoundedCornerShape(16.dp)
-                                )
+                                .background(color = Color("#F9D8D8".toColorInt()))
+                                .size(30.dp)
                         ) {
                             Icon(
-                                Icons.Default.ArrowBack,
-                                contentDescription = "Menu",
-                                tint = Color("#E23E3E".toColorInt())
+                                painter = painterResource(id = R.drawable.camera),
+                                contentDescription = "Gallery",
+                                tint = Color("#E23E3E".toColorInt()),
+                                modifier = Modifier.size(24.dp)
                             )
                         }
                     },
-                    actions = {
+                    trailingIcon = {
                         IconButton(
-                            onClick = { /* Handle search */ },
+                            onClick = {
+                                if (messageText.isNotBlank()) {
+                                    messages.add(Message(messageText, currentTime))
+                                    messageText = ""
+                                }
+                            },
                             modifier = Modifier
-                                .size(48.dp)
-                                .background(
-                                    Color("#F9D8D8".toColorInt()),
-                                    shape = RoundedCornerShape(16.dp)
-                                )
+                                .clip(CircleShape)
+                                .background(color = Color("#F9D8D8".toColorInt()))
+                                .size(24.dp)
                         ) {
                             Icon(
-                                Icons.Default.Notifications,
-                                contentDescription = "Search",
+                                painter = painterResource(id = R.drawable.doubleright),
+                                contentDescription = "Send",
                                 tint = Color("#E23E3E".toColorInt())
                             )
                         }
                     },
                 )
-            }
-        },
-        bottomBar = {
-            Row(
-                modifier = Modifier.padding(8.dp)
-            ) {
-                ProvideTextStyle(TextStyle(color = Color.Black)) {
-                    TextField(
-                        value = messageText,
-                        onValueChange = { messageText = it },
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Send
-                        ),
-                        keyboardActions = KeyboardActions(onSend = {
-                            if (messageText.isNotBlank()) {
-                                messages.add(Message(messageText, currentTime))
-                                messageText = ""
-                            }
-                        }),
-                        modifier = Modifier
-                            .padding(end = 4.dp)
-                            .weight(1f)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(Color.Black),
-                        leadingIcon = {
-                            IconButton(
-                                onClick = {
-                                    // Handle camera/gallery action here
-                                },
-                                modifier = Modifier
-                                    .background(color = Color("#F9D8D8".toColorInt()))
-                                    .size(30.dp)
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.camera),
-                                    contentDescription = "Gallery",
-                                    tint = Color("#E23E3E".toColorInt()),
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                        },
-                        trailingIcon = {
-                            IconButton(
-                                onClick = {
-                                    if (messageText.isNotBlank()) {
-                                        messages.add(Message(messageText, currentTime))
-                                        messageText = ""
-                                    }
-                                },
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .background(color = Color("#F9D8D8".toColorInt()))
-                                    .size(24.dp)
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.doubleright),
-                                    contentDescription = "Send",
-                                    tint = Color("#E23E3E".toColorInt())
-                                )
-                            }
-                        },
-                    )
-                }
             }
         }
     ) {
