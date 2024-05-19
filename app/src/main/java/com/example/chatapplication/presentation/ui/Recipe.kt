@@ -7,7 +7,6 @@ data class Recipe(
     val title: String,
     val category: String,
     val cookingTime: String,
-    val energy: String,
     val rating: String,
     val description: String,
     val ingredients: List<Ingredient>,
@@ -20,7 +19,6 @@ val strawberryCake = Recipe(
     title = "Strawberry Cake",
     category = "Desserts",
     cookingTime = "50 min",
-    energy = "620 kcal",
     rating = "4,9",
     description = "This dessert is very tasty and not difficult to prepare. Also, you can replace strawberries with any other berry you like.",
     ingredients = listOf(

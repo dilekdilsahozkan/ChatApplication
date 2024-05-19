@@ -1,7 +1,6 @@
 package com.example.chatapplication.presentation.ui
 
 import androidx.compose.runtime.Composable
-
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -150,7 +149,6 @@ fun BasicInfo(recipe: Recipe) {
             .padding(top = 16.dp)
     ) {
         InfoColumn(iconResource = R.drawable.ic_clock, text = recipe.cookingTime)
-        InfoColumn(iconResource = R.drawable.ic_flame, text = recipe.energy)
         InfoColumn(iconResource = R.drawable.ic_star, text = recipe.rating)
     }
 }
