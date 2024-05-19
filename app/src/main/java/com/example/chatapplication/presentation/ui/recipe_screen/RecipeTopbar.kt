@@ -1,4 +1,4 @@
-package com.example.myapplication2
+package com.example.chatapplication.presentation.ui.recipe_screen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -23,14 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.myapplication2.ui.theme.MyApplication2Theme
+import com.example.chatapplication.R
+import com.example.chatapplication.ui.theme.ChatApplicationTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyApplication2Theme {
+            ChatApplicationTheme {
                 Main()
             }
         }
@@ -73,7 +73,7 @@ fun Main() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MyApplication2Theme {
+    ChatApplicationTheme {
 
     }
 }
