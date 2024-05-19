@@ -6,8 +6,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,7 +38,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -59,7 +56,6 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ChatScreen() {
     var messageText by remember { mutableStateOf("") }
-    val focusManager = LocalFocusManager.current
     val currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
 
     data class Message(val text: String, val time: String)
@@ -77,7 +73,7 @@ fun ChatScreen() {
             TopAppBar(
                 modifier = Modifier.padding(16.dp),
                 title = { Text(text = "Chat", fontWeight = FontWeight.Bold) },
-                colors = TopAppBarDefaults.topAppBarColors(Color.Transparent) ,
+                colors = TopAppBarDefaults.topAppBarColors(Color.Transparent),
                 navigationIcon = {
                     IconButton(
                         onClick = { /* Handle navigation drawer */ },
@@ -118,10 +114,16 @@ fun ChatScreen() {
         bottomBar = {
             ProvideTextStyle(TextStyle(color = Color.Black)) {
                 TextField(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 10.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .fillMaxWidth(),
                     value = messageText,
                     onValueChange = { messageText = it },
-                    colors = TextFieldDefaults.colors(unfocusedContainerColor = Color("#F9D8D8".toColorInt()),
-                        focusedContainerColor = Color("#F9D8D8".toColorInt()) ) ,
+                    colors = TextFieldDefaults.colors(
+                        unfocusedContainerColor = Color("#F9D8D8".toColorInt()),
+                        focusedContainerColor = Color("#F9D8D8".toColorInt())
+                    ),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Send
                     ),
@@ -131,10 +133,6 @@ fun ChatScreen() {
                             messageText = ""
                         }
                     }),
-                    modifier = Modifier
-                        .padding(end = 4.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(Color.Black),
                     leadingIcon = {
                         IconButton(
                             onClick = {
