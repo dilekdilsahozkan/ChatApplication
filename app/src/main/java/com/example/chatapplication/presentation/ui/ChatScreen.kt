@@ -5,11 +5,15 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -33,11 +37,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,9 +50,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import com.example.chatapplication.R
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -56,15 +57,15 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ChatScreen() {
     var messageText by remember { mutableStateOf("") }
-    val currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))
 
-    data class Message(val text: String, val time: String)
+    data class Message(val text: String, val isSent: Boolean)
 
     val messages = remember {
         mutableStateListOf(
-            Message("Hi!", "22:45"),
-            Message("Are you here ?", "23:10"),
-            Message("Please text me ", "00:30")
+            Message("Hi!", false),
+            Message("Are you here ?", true),
+            Message("Please text me", false),
+            Message("Ok, let me think", true)
         )
     }
 
@@ -109,7 +110,6 @@ fun ChatScreen() {
                     }
                 },
             )
-
         },
         bottomBar = {
             ProvideTextStyle(TextStyle(color = Color.Black)) {
@@ -122,14 +122,14 @@ fun ChatScreen() {
                     onValueChange = { messageText = it },
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = Color("#F9D8D8".toColorInt()),
-                        focusedContainerColor = Color("#F9D8D8".toColorInt())
+                        focusedContainerColor = Color("#F9D8D8".toColorInt()),
                     ),
                     keyboardOptions = KeyboardOptions.Default.copy(
                         imeAction = ImeAction.Send
                     ),
                     keyboardActions = KeyboardActions(onSend = {
                         if (messageText.isNotBlank()) {
-                            messages.add(Message(messageText, currentTime))
+                            messages.add(Message(messageText, true))
                             messageText = ""
                         }
                     }),
@@ -154,7 +154,7 @@ fun ChatScreen() {
                         IconButton(
                             onClick = {
                                 if (messageText.isNotBlank()) {
-                                    messages.add(Message(messageText, currentTime))
+                                    messages.add(Message(messageText, true))
                                     messageText = ""
                                 }
                             },
@@ -183,9 +183,37 @@ fun ChatScreen() {
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize()
             )
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom,
+                contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 75.dp)
+            ) {
+                items(messages) { message -> // Specify the type of 'message' as 'Message'
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        contentAlignment = if (message.isSent) Alignment.CenterEnd else Alignment.CenterStart
+                    ) {
+                        Text(
+                            text = message.text,
+                            modifier = Modifier
+                                .background(
+                                    color = if (message.isSent) Color("#F9D8D8".toColorInt()) else Color("#F1F1F1".toColorInt()),
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                                .padding(12.dp),
+                            color = Color.Black
+                        )
+                    }
+                }
+            }
         }
     }
 }
+
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
