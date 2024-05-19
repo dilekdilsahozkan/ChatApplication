@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-
-package com.example.chatapplication.presentation.ui
-import androidx.compose.foundation.layout.*
-=======
 package com.example.chatapplication.presentation.ui
 
->>>>>>> berksBranch
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
