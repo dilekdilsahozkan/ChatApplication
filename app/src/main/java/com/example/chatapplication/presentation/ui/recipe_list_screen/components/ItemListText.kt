@@ -1,4 +1,4 @@
-package com.example.chatapplication.presentation.ui.recipe_screen.components
+package com.example.chatapplication.presentation.ui.recipe_list_screen.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
