@@ -83,6 +83,7 @@ dependencies {
     //Hilt
     implementation("com.google.dagger:hilt-android:2.46")
     kapt("com.google.dagger:hilt-android-compiler:2.46")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
@@ -105,5 +106,8 @@ dependencies {
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0-beta01")
     implementation("androidx.compose.ui:ui:1.4.3") // Or the latest version
     implementation("androidx.compose.material3:material3:1.1.1") // Optional, if using Material 3 components
+
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
 }
