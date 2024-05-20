@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.chatapplication.presentation.ui.recipe_screen.RecipeScreen
+import com.example.chatapplication.presentation.ui.recipe_list_screen.RecipeListScreen
 import kotlinx.coroutines.launch
 
 
@@ -167,7 +167,7 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = "chatScreen", modifier = Modifier.padding(paddingValues)) {
                   composable("chatScreen") { ChatScreen(navController) }
                   composable("bakingScreen") { BakingScreen() }
-                  composable("recipeScreen") { RecipeScreen()}
+                  composable("recipeScreen") { RecipeListScreen() }
 
                 }
               }

@@ -1,6 +1,5 @@
 package com.example.chatapplication.presentation.ui
 
-import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -60,11 +59,10 @@ import androidx.core.graphics.toColorInt
 import com.example.chatapplication.R
 import kotlinx.coroutines.launch
 import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
-import com.example.chatapplication.presentation.ui.recipe_screen.RecipeScreen
+import com.example.chatapplication.presentation.ui.recipe_list_screen.RecipeListScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -72,7 +70,7 @@ fun MyApp() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "chatScreen") {
         composable("chatScreen") { ChatScreen(navController) }
-        composable("recipeScreen") { RecipeScreen() }
+        composable("recipeScreen") { RecipeListScreen() }
     }
 }
 //Chat ekranı ve mesaj balonları.
