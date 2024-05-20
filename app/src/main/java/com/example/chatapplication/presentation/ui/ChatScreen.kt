@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -58,12 +59,27 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import com.example.chatapplication.R
 import kotlinx.coroutines.launch
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.composable
+import com.example.chatapplication.presentation.ui.recipe_screen.RecipeScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun MyApp() {
+    val navController = rememberNavController()
+    NavHost(navController, startDestination = "chatScreen") {
+        composable("chatScreen") { ChatScreen(navController) }
+        composable("recipeScreen") { RecipeScreen() }
+    }
+}
 //Chat ekranı ve mesaj balonları.
 data class Message(val text: String, val isSent: Boolean)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatScreen() {
+fun ChatScreen(navController: NavController) {
     var messageText by remember { mutableStateOf("") }
     val messages = remember {
         mutableStateListOf(
@@ -76,10 +92,10 @@ fun ChatScreen() {
 
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
-
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
-        topBar = { ChatTopAppBar() },
+        topBar = { ChatTopAppBar(navController) },
         bottomBar = {
             ChatInputBar(
                 messageText,
@@ -98,10 +114,12 @@ fun ChatScreen() {
     ) { innerPadding ->
         ChatBackground {
             //Mesaj balonları.
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
+                    .clickable { focusManager.clearFocus() }
                     .padding(horizontal = 18.dp, vertical = 10.dp)
                     .imePadding(),
                 contentPadding = PaddingValues(vertical = 4.dp),
@@ -120,7 +138,7 @@ fun ChatScreen() {
 //chat ekranını üst çubuğu.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatTopAppBar() {
+fun ChatTopAppBar(navController: NavController) {
     TopAppBar(
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
         title = { Text(text = "Chat", fontWeight = FontWeight.Bold) },
@@ -129,6 +147,7 @@ fun ChatTopAppBar() {
             IconButton(
                 onClick = {
                     /*Navigation Kodları Buraya gelecek*/
+                    navController.navigate("recipeScreen")
                 },
                 modifier = Modifier
                     .padding(end = 10.dp)
@@ -266,7 +285,7 @@ fun MessageItem(message: Message) {
 @Preview
 @Composable
 fun PreviewChatScreen() {
-    ChatScreen()
+    MyApp()
 }
 
 

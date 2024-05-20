@@ -96,6 +96,8 @@ dependencies {
 
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.5.3")
+    implementation ("androidx.navigation:navigation-compose:2.4.0-alpha10")
+
 
     //Material3
     implementation("androidx.compose.material3:material3:1.2.1")

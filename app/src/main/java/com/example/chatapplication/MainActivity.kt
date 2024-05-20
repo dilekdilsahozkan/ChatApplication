@@ -165,7 +165,7 @@ class MainActivity : ComponentActivity() {
               ) { paddingValues ->
                 // NavHost to handle navigation
                 NavHost(navController = navController, startDestination = "chatScreen", modifier = Modifier.padding(paddingValues)) {
-                  composable("chatScreen") { ChatScreen() }
+                  composable("chatScreen") { ChatScreen(navController) }
                   composable("bakingScreen") { BakingScreen() }
                   composable("recipeScreen") { RecipeScreen()}
 
