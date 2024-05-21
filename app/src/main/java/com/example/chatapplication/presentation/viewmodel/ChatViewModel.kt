@@ -13,22 +13,23 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ChatViewModel : ViewModel() {
-    private val _chatState= MutableStateFlow(ChatState())
-
+    private val _chatState = MutableStateFlow(ChatState())
     val chatState = _chatState.asStateFlow()
+    val isLoading = MutableStateFlow(false)
 
-    fun onEvent(event: ChatUiEvent){
-        when(event){
+    fun onEvent(event: ChatUiEvent) {
+        when (event) {
             is ChatUiEvent.SendPrompt -> {
-                if(event.prompt.isNotEmpty()){
-                    addPrompt(event.prompt,event.bitmap)
-                    if(event.bitmap != null){
-                        getResponseWithImage(event.prompt,event.bitmap)
-                    }else{
+                if (event.prompt.isNotEmpty()) {
+                    addPrompt(event.prompt, event.bitmap)
+                    if (event.bitmap != null) {
+                        getResponseWithImage(event.prompt, event.bitmap)
+                    } else {
                         getResponse(event.prompt)
                     }
                 }
             }
+
             is ChatUiEvent.UpdatePrompt -> {
                 _chatState.update {
                     it.copy(
@@ -36,6 +37,7 @@ class ChatViewModel : ViewModel() {
                     )
                 }
             }
+
             is ChatUiEvent.UpdateWithBitmap -> {
                 _chatState.update {
                     it.copy(
@@ -48,11 +50,11 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    private fun addPrompt(prompt: String, bitmap : Bitmap?){
+    private fun addPrompt(prompt: String, bitmap: Bitmap?) {
         _chatState.update {
             it.copy(
-                chatList=it.chatList.toMutableList().apply {
-                    add(0, Chat(prompt ,bitmap,isFromUser = true))
+                chatList = it.chatList.toMutableList().apply {
+                    add(0, Chat(prompt, bitmap, isFromUser = true))
                 },
                 prompt = "",
                 bitmap = null
@@ -61,31 +63,50 @@ class ChatViewModel : ViewModel() {
         }
 
     }
-    private fun getResponse(prompt: String){
+
+    private fun getResponse(prompt: String) {
         viewModelScope.launch {
-            val chat= ChatData.getReponse(prompt)
+            isLoading.value = true
+            val chat = Chat("", null, isFromUser = false)
             _chatState.update {
                 it.copy(
-                    chatList=it.chatList.toMutableList().apply {
+                    chatList = it.chatList.toMutableList().apply {
                         add(0, chat)
-
                     }
                 )
             }
+            val response = ChatData.getReponse(prompt)
+            _chatState.update {
+                it.copy(
+                    chatList = it.chatList.toMutableList().apply {
+                        this[0] = response
+                    }
+                )
+            }
+            isLoading.value = false
         }
     }
 
-    private fun getResponseWithImage(prompt: String, bitmap: Bitmap){
+    private fun getResponseWithImage(prompt: String, bitmap: Bitmap) {
         viewModelScope.launch {
-            val chat= ChatData.getReponse(prompt,bitmap )
+            isLoading.value = true
+            val chat = Chat("", null, isFromUser = false)
             _chatState.update {
                 it.copy(
-                    chatList=it.chatList.toMutableList().apply {
+                    chatList = it.chatList.toMutableList().apply {
                         add(0, chat)
-
                     }
                 )
             }
+            val response = ChatData.getReponse(prompt, bitmap)
+            _chatState.update {
+                it.copy(
+                    chatList = it.chatList.toMutableList().apply {
+                        this[0] = response
+                    }
+                )
+            }
+            isLoading.value = false
         }
     }
 }
