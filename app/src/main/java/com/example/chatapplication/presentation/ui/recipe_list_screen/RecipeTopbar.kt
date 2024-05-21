@@ -29,7 +29,7 @@ import com.example.chatapplication.ui.theme.ChatApplicationTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeTopBar() {
+fun Recipe() {
 
     Scaffold(
         topBar = {

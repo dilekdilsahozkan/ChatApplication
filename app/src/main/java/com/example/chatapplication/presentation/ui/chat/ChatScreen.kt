@@ -81,10 +81,7 @@ import com.example.chatapplication.presentation.viewmodel.ChatViewModel
 fun ChatScreen(navController: NavController, imagePicker: ActivityResultLauncher<PickVisualMediaRequest>, uriState: MutableStateFlow<String>) {
 
 
-
-
     val listState = rememberLazyListState()
-    val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
 
     val chatViewModel = viewModel<ChatViewModel>()
@@ -142,7 +139,6 @@ fun ChatTopAppBar(navController: NavController) {
         navigationIcon = {
             IconButton(
                 onClick = {
-
                    navController.navigate("recipe")
                 },
                 modifier = Modifier

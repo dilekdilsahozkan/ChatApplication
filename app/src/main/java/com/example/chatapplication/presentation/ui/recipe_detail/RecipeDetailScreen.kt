@@ -1,4 +1,4 @@
-package com.example.chatapplication.presentation.ui
+package com.example.chatapplication.presentation.ui.recipe_detail
 
 import androidx.compose.runtime.Composable
 import androidx.annotation.DrawableRes
@@ -38,13 +38,13 @@ val medium: CornerBasedShape = RoundedCornerShape(4.dp)
 val large: CornerBasedShape = RoundedCornerShape(0.dp)
 
 @Composable
-fun RecipesDetail(recipe: Recipe) {
+fun RecipeDetailScreen() {
     val scrollState = rememberLazyListState()
 
-    Box {
+   /* Box {
         Content(recipe, scrollState)
         ParallaxToolbar(recipe, scrollState)
-    }
+    }*/
 }
 
 @Composable

@@ -18,20 +18,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
+import com.example.chatapplication.data.remote.model.Recipe
 import com.example.chatapplication.presentation.navigation.NavigationGraph
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-
-
-//data class NavigationItem(
-//  val title: String,
-//  val selectedIcon: ImageVector,
-//  val unselectedIcon: ImageVector,
-//  val badgeCount: Int? = null,
-//  val route: String
-//)
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -45,7 +36,6 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  @OptIn(ExperimentalMaterial3Api::class)
   @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
   @RequiresApi(Build.VERSION_CODES.O)
 
@@ -61,7 +51,7 @@ class MainActivity : ComponentActivity() {
           modifier = Modifier.fillMaxSize(),
           color = MaterialTheme.colorScheme.background,
         ) {
-          NavigationGraph(modifier = Modifier, navController = navController, startDestination = "chat", imagePicker, uriState )
+          NavigationGraph(modifier = Modifier, navController = navController, startDestination = "chat", imagePicker, uriState , recipe = Recipe())
 
         }
       }

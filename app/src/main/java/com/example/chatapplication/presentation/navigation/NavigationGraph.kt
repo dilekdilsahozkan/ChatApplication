@@ -10,20 +10,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import com.example.chatapplication.data.remote.model.Recipe
 import com.example.chatapplication.presentation.ui.chat.ChatScreen
-import com.example.chatapplication.presentation.ui.recipe_list_screen.RecipeListScreen
+import com.example.chatapplication.presentation.ui.recipe_detail.RecipeDetailScreen
+import com.example.chatapplication.presentation.ui.recipe_list_screen.RecipeScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
 @Composable
 fun NavigationGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-    //coroutineScope: CoroutineScope = rememberCoroutineScope(),
+    navController: NavHostController,
     startDestination: String = Destination.CHAT,
     imagePicker: ActivityResultLauncher<PickVisualMediaRequest>,
     uriState: MutableStateFlow<String>,
+    recipe: Recipe,
     navActions: MortyNavigationActions = remember(navController) {
         MortyNavigationActions(navController)
     }
@@ -46,13 +47,13 @@ fun NavigationGraph(
         composable(
             route = Destination.RECIPE
         ) {
-            RecipeListScreen()
+            RecipeScreen(navController)
         }
 
         composable(
             route = Destination.RECIPE_DETAIL
         ) {
-
+            RecipeDetailScreen()
         }
 
     }

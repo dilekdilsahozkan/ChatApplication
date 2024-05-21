@@ -9,5 +9,5 @@ data class Recipe (
 )
 
 data class AllRecipe(
-    val recipe: List<Recipe>? = null
+    val items: List<Recipe>? = null
 )

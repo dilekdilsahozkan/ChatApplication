@@ -1,4 +1,4 @@
-package com.example.chatapplication.presentation.ui
+package com.example.chatapplication.presentation.ui.recipe_detail
 
 import androidx.annotation.DrawableRes
 import com.example.chatapplication.R
