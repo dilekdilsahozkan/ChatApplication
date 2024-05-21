@@ -76,7 +76,7 @@ import androidx.navigation.compose.composable
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.example.chatapplication.presentation.ui.recipe_screen.RecipeScreen
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import androidx.activity.result.ActivityResultLauncher
