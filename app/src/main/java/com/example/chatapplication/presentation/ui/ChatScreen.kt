@@ -101,7 +101,7 @@ import com.google.android.gms.cast.framework.media.ImagePicker
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatScreen( imagePicker: ActivityResultLauncher<PickVisualMediaRequest>, uriState: MutableStateFlow<String>) {
+fun ChatScreen(navController: NavController, imagePicker: ActivityResultLauncher<PickVisualMediaRequest>, uriState: MutableStateFlow<String>) {
 
 
 
@@ -116,7 +116,7 @@ fun ChatScreen( imagePicker: ActivityResultLauncher<PickVisualMediaRequest>, uri
     val bitmap = getBitmap(uriState)
 
     Scaffold(
-        topBar = { ChatTopAppBar() },
+        topBar = { ChatTopAppBar(navController) },
         bottomBar = {
             ChatInputBar(bitmap,imagePicker,uriState,chatState,chatViewModel)
         }
@@ -157,7 +157,7 @@ fun ChatScreen( imagePicker: ActivityResultLauncher<PickVisualMediaRequest>, uri
 //chat ekranını üst çubuğu.
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatTopAppBar() {
+fun ChatTopAppBar(navController: NavController) {
     TopAppBar(
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
         title = { Text(text = "Chat", fontWeight = FontWeight.Bold) },
@@ -165,8 +165,8 @@ fun ChatTopAppBar() {
         navigationIcon = {
             IconButton(
                 onClick = {
-                    /*Navigation Kodları Buraya gelecek*/
-                   /*navController.navigate("recipeScreen")*/
+
+                   navController.navigate("recipe")
                 },
                 modifier = Modifier
                     .padding(end = 10.dp)
