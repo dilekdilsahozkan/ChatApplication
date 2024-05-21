@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.chatapplication.base.NavigationGraph
 import com.example.chatapplication.presentation.ui.recipe_list_screen.RecipeListScreen
 
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,6 +85,7 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
+      val navController = rememberNavController()
 
       ChatApplicationTheme {
         // A surface container using the 'background' color from the theme
@@ -91,7 +93,8 @@ class MainActivity : ComponentActivity() {
           modifier = Modifier.fillMaxSize(),
           color = MaterialTheme.colorScheme.background,
         ) {
-          ChatScreen(imagePicker, uriState)
+          NavigationGraph(modifier = Modifier, navController = navController, startDestination = "chat", imagePicker, uriState )
+
         }
       }
     }
