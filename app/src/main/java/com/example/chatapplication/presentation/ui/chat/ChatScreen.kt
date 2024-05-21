@@ -58,6 +58,13 @@ import coil.request.ImageRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import androidx.activity.result.ActivityResultLauncher
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.StartOffset
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -72,6 +79,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.chatapplication.base.ChatState
@@ -87,13 +95,11 @@ fun ChatScreen(
     imagePicker: ActivityResultLauncher<PickVisualMediaRequest>,
     uriState: MutableStateFlow<String>
 ) {
-
     val listState = rememberLazyListState()
     val focusManager = LocalFocusManager.current
-
     val chatViewModel = viewModel<ChatViewModel>()
     val chatState = chatViewModel.chatState.collectAsState().value
-
+    val isLoading = chatViewModel.isLoading.collectAsState().value
     val bitmap = getBitmap(uriState)
 
     Scaffold(
@@ -105,16 +111,17 @@ fun ChatScreen(
                 uriState,
                 chatState,
                 chatViewModel,
-                onImageClear = { uriState.value = "" } // Callback to clear the image URI
+                onImageClear = { uriState.value = "" }
             )
         }
     ) { innerPadding ->
         ChatBackground {
-            LaunchedEffect(chatState.chatList.size) {
-                if (chatState.chatList.size > 0) {
+            LaunchedEffect(chatState.chatList) {
+                if (chatState.chatList.isNotEmpty()) {
                     listState.animateScrollToItem(chatState.chatList.size - 1)
                 }
             }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -126,13 +133,14 @@ fun ChatScreen(
                 verticalArrangement = Arrangement.Bottom,
                 state = listState
             ) {
-                itemsIndexed(chatState.chatList.reversed()) { _, chat ->
+                itemsIndexed(chatState.chatList.reversed()) { index, chat ->
                     if (chat.isFromUser) {
-                        UserChatItem(
-                            prompt = chat.prompt, bitmap = chat.bitmap
-                        )
+                        UserChatItem(prompt = chat.prompt, bitmap = chat.bitmap)
                     } else {
-                        ModelChatItem(response = chat.prompt)
+                        ModelChatItem(
+                            response = chat.prompt,
+                            isLoading = isLoading && chatState.chatList.size - 1 == index
+                        )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                 }
@@ -140,7 +148,6 @@ fun ChatScreen(
         }
     }
 }
-
 
 
 //chat ekranını üst çubuğu.
@@ -250,7 +257,8 @@ fun ChatInputBar(
                     unfocusedIndicatorColor = Color("#F9D8D8".toColorInt()),
                     focusedContainerColor = Color("#F9D8D8".toColorInt()),
                     focusedIndicatorColor = Color("#F9D8D8".toColorInt()),
-                    disabledIndicatorColor = Color("#F9D8D8".toColorInt()
+                    disabledIndicatorColor = Color(
+                        "#F9D8D8".toColorInt()
                     )
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
@@ -366,29 +374,74 @@ fun UserChatItem(prompt: String, bitmap: Bitmap?) {
     }
 }
 
-
 // chat bot mesaj balonu
 @Composable
-fun ModelChatItem(response: String) {
+fun ModelChatItem(response: String, isLoading: Boolean) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentSize(Alignment.CenterStart),
         contentAlignment = Alignment.CenterStart
     ) {
-        Text(
-            text = response,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .background(
                     color = Color("#F1F1F1".toColorInt()),
                     shape = RoundedCornerShape(16.dp)
                 )
-                .padding(12.dp),
-            color = Color.Black
-        )
+                .padding(12.dp)
+        ) {
+            if (isLoading) {
+                GoogleLoadingIndicator()
+            } else {
+                Text(
+                    text = response,
+                    color = Color.Black
+                )
+            }
+        }
     }
 }
 
+@Composable
+fun GoogleLoadingIndicator(
+    modifier: Modifier = Modifier,
+    dotSize: Dp = 5.dp,
+    dotColor: Color = Color.Gray,
+    animationDelay: Int = 200
+) {
+    val infiniteTransition = rememberInfiniteTransition()
+
+    val dotScaleValues = (0..2).map { index ->
+        infiniteTransition.animateFloat(
+            initialValue = 1f,
+            targetValue = 1.5f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(800, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse,
+                initialStartOffset = StartOffset(index * animationDelay)
+            )
+        )
+    }
+
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        dotScaleValues.forEachIndexed { index, scale ->
+            Box(
+                modifier = Modifier
+                    .size(dotSize * scale.value)
+                    .background(dotColor, CircleShape)
+            )
+            if (index < 2) {
+                Spacer(modifier = Modifier.width(4.dp))
+            }
+        }
+    }
+}
 
 @Composable
 private fun getBitmap(uriState: MutableStateFlow<String>): Bitmap? {
