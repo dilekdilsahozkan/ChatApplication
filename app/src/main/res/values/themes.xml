@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <style name="Theme.MySplashScreen" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/white</item>
+        <item name="postSplashScreenTheme">@style/Theme.ChatApplication</item>
+    </style>
+
     <style name="Theme.ChatApplication" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
