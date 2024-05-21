@@ -72,7 +72,6 @@ fun ChatScreen(
                     listState.animateScrollToItem(chatState.chatList.size - 1)
                 }
             }
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()

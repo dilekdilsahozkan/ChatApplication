@@ -36,7 +36,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import com.example.chatapplication.R
@@ -61,12 +60,11 @@ fun ChatInputBar(
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, bottom = 10.dp)
         ) {
-            // Layout Row for Image Preview and TextField
             androidx.compose.foundation.layout.Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .imePadding(),
-                verticalAlignment = Alignment.Bottom // Align to bottom
+                verticalAlignment = Alignment.Bottom
             ) {
                 bitmap?.let {
                     Box(
@@ -97,7 +95,6 @@ fun ChatInputBar(
                         }
                     }
                 }
-                // TextField
                 TextField(
                     modifier = Modifier
                         .systemBarsPadding()
