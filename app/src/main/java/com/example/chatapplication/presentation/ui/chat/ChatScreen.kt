@@ -151,7 +151,7 @@ fun ChatTopAppBar(navController: NavController) {
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Recipe Page",
+                    contentDescription = "RecipeTopBar Page",
                     tint = Color("#E23E3E".toColorInt())
                 )
             }
