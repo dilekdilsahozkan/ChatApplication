@@ -84,37 +84,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.rounded.AddPhotoAlternate
 import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chatapplication.data.ChatState
 import com.example.chatapplication.data.ChatUiEvent
 import com.example.chatapplication.presentation.viewmodel.ChatViewModel
 import com.google.android.gms.cast.framework.media.ImagePicker
 
-//data class ImagePicker(
-//    val launcher: ActivityResultLauncher<PickVisualMediaRequest>
-//)
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Composable
-//fun MyApp(uriState: MutableStateFlow<String>) {
-//    val navController = rememberNavController()
-//    NavHost(navController, startDestination = "chatScreen") {
-//        composable("chatScreen") { ChatScreen(navController, imagePicker: ActivityResultLauncher<PickVisualMediaRequest>, uriState: MutableStateFlow<String>) }
-//        composable("recipeScreen") { RecipeScreen() }
-//    }
-//}
 
 //Chat ekranı ve mesaj balonları.
 @OptIn(ExperimentalMaterial3Api::class)
-data class Message(val text: String, val isSent: Boolean)
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatScreen(/*navController: NavController , */ imagePicker: ActivityResultLauncher<PickVisualMediaRequest>, uriState: MutableStateFlow<String>) {
-    val navController = rememberNavController()
+fun ChatScreen( imagePicker: ActivityResultLauncher<PickVisualMediaRequest>, uriState: MutableStateFlow<String>) {
 
-    var messageText by remember { mutableStateOf("") }
+
+
 
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -133,7 +123,11 @@ fun ChatScreen(/*navController: NavController , */ imagePicker: ActivityResultLa
     ) { innerPadding ->
         ChatBackground {
             //Mesaj balonları.
-
+            LaunchedEffect(chatState.chatList.size) {
+                if (chatState.chatList.size > 0){
+                listState.animateScrollToItem(chatState.chatList.size - 1)
+                    }
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -153,6 +147,7 @@ fun ChatScreen(/*navController: NavController , */ imagePicker: ActivityResultLa
                     } else {
                         ModelChatItem(response = chat.prompt)
                     }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -377,38 +372,51 @@ fun ChatBackground(content: @Composable () -> Unit) {
 
 // kullanıcı mesajı
 @Composable
-fun UserChatItem(prompt : String, bitmap: Bitmap?){
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentSize( Alignment.CenterEnd ),
-        contentAlignment = Alignment.CenterEnd
-    ){
-        bitmap?.let {
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(260.dp)
-                    .padding(bottom = 2.dp)
-                    .clip(RoundedCornerShape(12.dp)),
-                contentDescription = "image",
-                contentScale = ContentScale.Crop,
-                bitmap = it.asImageBitmap()
-            )
-        }
-        Text(
-            text = prompt,
+fun UserChatItem(prompt: String, bitmap: Bitmap?) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        // Message bubble
+        Box(
             modifier = Modifier
                 .background(
-                    color =  Color("#F9D8D8".toColorInt()) ,
+                    color = Color("#F9D8D8".toColorInt()),
                     shape = RoundedCornerShape(16.dp)
                 )
-                .padding(12.dp),
-            color = Color.Black
-        )
+                .padding(12.dp)
+        ) {
+            Text(
+                text = prompt,
+                color = Color.Black
+            )
+        }
+
+        // Avatar or icon
+        Box(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .clip(CircleShape)
+                .background(Color("#F9D8D8".toColorInt()))
+                .size(48.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            bitmap?.let {
+                Image(
+                    modifier = Modifier.fillMaxSize(),
+                    contentDescription = "User Image",
+                    contentScale = ContentScale.Crop,
+                    bitmap = it.asImageBitmap()
+                )
+            } ?: Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = "User Icon",
+                tint = Color.Gray
+            )
+        }
     }
 }
-
 // chat bot mesaj balonu
 
 @Composable

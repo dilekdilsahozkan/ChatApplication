@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.chatapplication.presentation.ui.recipe_list_screen.RecipeListScreen
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -66,6 +67,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
   private val uriState = MutableStateFlow(value = "")//chat screen
   private val imagePicker = registerForActivityResult<PickVisualMediaRequest, Uri?>(// chatscreen
     ActivityResultContracts.PickVisualMedia()
@@ -82,6 +84,7 @@ class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
+
       ChatApplicationTheme {
         // A surface container using the 'background' color from the theme
         Surface(
