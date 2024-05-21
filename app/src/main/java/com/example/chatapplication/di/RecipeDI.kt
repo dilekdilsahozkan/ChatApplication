@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class RecipeDI {
     @Provides
-    fun provideBaseUrl() = "https://jellybellywikiapi.onrender.com/api"
+    fun provideBaseUrl() = "https://jellybellywikiapi.onrender.com/api/"
 
     @Singleton
     @Provides

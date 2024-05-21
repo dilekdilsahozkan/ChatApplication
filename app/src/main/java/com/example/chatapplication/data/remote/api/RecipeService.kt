@@ -8,10 +8,10 @@ import retrofit2.http.Path
 
 interface RecipeService {
 
-    @GET("/recipes")
+    @GET("recipes")
     suspend fun recipe(): Response<AllRecipe>
 
-    @GET("/recipes/{id}")
+    @GET("recipes/{id}")
     suspend fun recipeDetail(
         @Path("id") movieId: String,
         ): Response<RecipeDetail>

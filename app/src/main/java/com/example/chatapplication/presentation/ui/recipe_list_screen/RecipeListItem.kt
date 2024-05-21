@@ -8,7 +8,7 @@ import com.example.chatapplication.presentation.ui.recipe_list_screen.components
 
 @Composable
 fun RecipeListItem(recipe: Recipe) {
-    ItemListImage(image = recipe.imageUrl!!)
+    recipe.imageUrl?.let { ItemListImage(image = it) }
     ItemListText()
 }
 
