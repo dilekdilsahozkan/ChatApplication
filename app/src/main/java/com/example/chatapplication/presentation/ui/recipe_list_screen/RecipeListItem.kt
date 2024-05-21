@@ -22,15 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.chatapplication.data.remote.model.Recipe
 import com.example.chatapplication.base.ItemCustomText
+import com.example.chatapplication.data.remote.model.RecipeDetail
 import com.example.chatapplication.ui.theme.customRed
 import com.example.chatapplication.ui.theme.itemText
 import com.example.chatapplication.ui.theme.semibold
 
 @Composable
 fun RecipeListItem(
-    recipe: Recipe,
+    recipe: RecipeDetail,
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
@@ -39,8 +39,7 @@ fun RecipeListItem(
             .fillMaxSize()
             .padding(16.dp)
             .clickable {
-                navController.navigate("recipe_detail")
-            },
+                navController.navigate("recipe_detail" + "/{${recipe.recipeId}}") },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -68,10 +67,7 @@ fun RecipeListItem(
                 text = recipe.name.toString().lowercase()
                     .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
                 style = itemText(fontFamily = semibold, fontSize = 16.sp),
-                modifier = Modifier.clickable {
-                    navController.navigate("recipe_detail") {
-                    }
-                }
+                modifier = Modifier
             )
             Spacer(modifier = Modifier.height(8.dp))
             Row(

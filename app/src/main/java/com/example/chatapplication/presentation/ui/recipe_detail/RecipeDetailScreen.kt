@@ -10,7 +10,11 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,11 +29,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.chatapplication.R
-import com.example.chatapplication.ui.theme.DarkGray
+import com.example.chatapplication.base.ViewState
+import com.example.chatapplication.data.remote.model.Recipe
+import com.example.chatapplication.data.remote.model.RecipeDetail
+import com.example.chatapplication.presentation.viewmodel.RecipeViewModel
 import com.example.chatapplication.ui.theme.Gray
 import com.example.chatapplication.ui.theme.LightGray
 import com.example.chatapplication.ui.theme.Pink
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.max
 import kotlin.math.min
 
@@ -38,17 +49,25 @@ val medium: CornerBasedShape = RoundedCornerShape(4.dp)
 val large: CornerBasedShape = RoundedCornerShape(0.dp)
 
 @Composable
-fun RecipeDetailScreen() {
+fun RecipeDetailScreen(
+    navController: NavController,
+    recipeDetail: RecipeDetail,
+    viewModel: RecipeViewModel) {
+
     val scrollState = rememberLazyListState()
 
-   /* Box {
-        Content(recipe, scrollState)
-        ParallaxToolbar(recipe, scrollState)
+   /* LaunchedEffect(recipeDetail.recipeId) {
+        recipeDetail.recipeId?.let { viewModel.getRecipeDetail(it) }
     }*/
+
+    Box {
+        RecipeDetailContent(recipeDetail, scrollState)
+        RecipeDetailTopBar(recipeDetail, scrollState, navController)
+    }
 }
 
 @Composable
-fun ParallaxToolbar(recipe: Recipe, scrollState: LazyListState) {
+fun RecipeDetailTopBar(recipe: RecipeDetail, scrollState: LazyListState, navController: NavController) {
     val imageHeight = 344.dp
     val maxOffset = with(LocalDensity.current) { imageHeight.roundToPx() }
     val offset = min(scrollState.firstVisibleItemScrollOffset, maxOffset)
@@ -72,23 +91,6 @@ fun ParallaxToolbar(recipe: Recipe, scrollState: LazyListState) {
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
-
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Text(
-                        text = recipe.category,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(LightGray)
-                            .padding(vertical = 6.dp, horizontal = 16.dp)
-                    )
-                }
             }
 
             Column(
@@ -98,7 +100,7 @@ fun ParallaxToolbar(recipe: Recipe, scrollState: LazyListState) {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = recipe.title,
+                    text = recipe.name.toString(),
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -117,57 +119,61 @@ fun ParallaxToolbar(recipe: Recipe, scrollState: LazyListState) {
                 .height(56.dp)
                 .padding(horizontal = 16.dp)
         ) {
-            CircularButton(R.drawable.ic_arrow_back)
-            CircularButton(R.drawable.ic_favorite)
+            IconButton(
+                onClick = {
+                    navController.navigate("recipe")
+                },
+                modifier = Modifier
+                    .padding(end = 10.dp)
+                    .size(48.dp)
+                    .background(
+                        Color("#F9D8D8".toColorInt()),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "RecipeTopBar Page",
+                    tint = Color("#E23E3E".toColorInt())
+                )
+            }
         }
     }
 }
 
-
 @Composable
-fun Content(recipe: Recipe, scrollState: LazyListState) {
+fun RecipeDetailContent(recipe: RecipeDetail, scrollState: LazyListState) {
     LazyColumn(contentPadding = PaddingValues(top = 400.dp), state = scrollState) {
         item {
             BasicInfo(recipe)
-            Description(recipe)
             IngredientsHeader()
-            IngredientsList(recipe)
+            //    IngredientsList(recipe)
             Steps(recipe)
-
         }
-
     }
 }
 
 
 @Composable
-fun BasicInfo(recipe: Recipe) {
+fun BasicInfo(recipe: RecipeDetail) {
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
     ) {
-        InfoColumn(iconResource = R.drawable.ic_clock, text = recipe.cookingTime)
-        InfoColumn(iconResource = R.drawable.ic_star, text = recipe.rating)
+        InfoColumn(
+            iconResource = R.drawable.ic_clock,
+            text = recipe.totalTime.toString())
+        InfoColumn(
+            iconResource = R.drawable.ic_star,
+            text = recipe.makingAmount.toString())
     }
 }
-
-
-@Composable
-fun Description(recipe: Recipe) {
-    Text(
-        text = recipe.description,
-        fontWeight = FontWeight.Medium,
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
-    )
-}
-
 
 @Composable
 fun IngredientsHeader() {
     Row(
-        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .padding(horizontal = 125.dp, vertical = 16.dp)
             .clip(medium)
@@ -175,85 +181,67 @@ fun IngredientsHeader() {
             .width(180.dp)
             .height(44.dp)
     ) {
-
-        Text(text = "INGREDIENTS",
-            color = Color(Pink.value),
+        Text(
+            text = "Ingredients",
+            color = Color("#E23E3E".toColorInt()),
             fontSize = 25.sp,
-            textAlign = TextAlign.Center,
-
-            )
-
+            textAlign = TextAlign.Start
+        )
     }
 }
-@Composable
-fun Steps(recipe: Recipe) {
 
-    Column (modifier = Modifier.fillMaxHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+@Composable
+fun Steps(recipe: RecipeDetail) {
+
+    Column(
+        modifier = Modifier.fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceEvenly
-    ){
-        Text(text = "STEPS",
-            color = Color(Pink.value),
+    ) {
+        Text(
+            text = "Construction",
+            color = Color("#E23E3E".toColorInt()),
             fontSize = 25.sp,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Start,
         )
-        Card (modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(16.dp),
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(16.dp),
             shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(
                 containerColor = LightGray
             )
-        ){
-            Text(text = recipe.instructions,
+        ) {
+            Text(
+                text = recipe.description.toString(),
                 textAlign = TextAlign.Start,
-                modifier = Modifier.padding(5.dp))
+                modifier = Modifier.padding(5.dp)
+            )
         }
-
     }
-
 }
 
+    /*
 @Composable
-fun IngredientsList(recipe: Recipe) {
-    EasyGrid(nColumns = 3, items = recipe.ingredients) {
-        IngredientCard(it.image, it.title, it.subtitle, Modifier)
+fun IngredientsList(recipe: RecipeDetail) {
+    EasyGrid(nColumns = 3, items = recipe.ingredients.subList()) {
+        IngredientCard(it.toString(), Modifier)
     }
 }
 
 
 @Composable
 fun IngredientCard(
-    @DrawableRes iconResource: Int,
-    title: String,
-    subtitle: String,
+    name: String,
     modifier: Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(bottom = 16.dp)
     ) {
-        Card(
-            shape = large,
-            elevation = CardDefaults.cardElevation(0.dp),
-            colors = CardDefaults.cardColors(Color.White),
-            modifier = Modifier
-                .width(100.dp)
-                .height(100.dp)
-                .padding(bottom = 8.dp)
-        ) {
-            Image(
-                painter = painterResource(id = iconResource),
-                contentDescription = null,
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .padding(4.dp)
-            )
-        }
         Text(
-            text = title,
+            text = name,
             modifier = Modifier.width(100.dp),
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
@@ -261,15 +249,9 @@ fun IngredientCard(
 
 
         )
-        Text(
-            text = subtitle,
-            color = DarkGray,
-            modifier = Modifier.width(100.dp),
-            fontSize = 14.sp ,
-            textAlign = TextAlign.Center
-        )
     }
 }
+*/
 
 @Composable
 fun <T> EasyGrid(nColumns: Int, items: List<T>, content: @Composable (T) -> Unit) {
@@ -318,7 +300,10 @@ fun CircularButton(
         onClick = onClick,
         contentPadding = PaddingValues(),
         shape = small,
-        colors = ButtonDefaults.buttonColors(contentColor = color, containerColor = Color.White),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = color,
+            containerColor = Color.White
+        ),
         elevation = elevation,
         modifier = Modifier
             .width(38.dp)

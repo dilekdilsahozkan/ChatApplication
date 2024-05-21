@@ -14,8 +14,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.chatapplication.base.ViewState
-import com.example.chatapplication.data.remote.model.AllRecipe
 import com.example.chatapplication.data.remote.model.Recipe
+import com.example.chatapplication.data.remote.model.RecipeDetail
 import com.example.chatapplication.presentation.viewmodel.RecipeViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -35,8 +35,8 @@ fun RecipeScreen(
     )
     {
         if (uiState is ViewState.Success) {
-            val recipes: List<Recipe> =
-                (uiState as ViewState.Success<AllRecipe>).data.items ?: emptyList()
+            val recipes: List<RecipeDetail> =
+                (uiState as ViewState.Success<Recipe>).data.items ?: emptyList()
             LazyColumn {
                 items(recipes) { recipe ->
                     RecipeListItem(
