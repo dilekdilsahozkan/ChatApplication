@@ -3,10 +3,10 @@ package com.example.chatapplication.presentation.viewmodel
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatapplication.data.Chat
+import com.example.chatapplication.base.ChatState
 import com.example.chatapplication.data.ChatData
-import com.example.chatapplication.data.ChatState
 import com.example.chatapplication.data.ChatUiEvent
+import com.example.chatapplication.data.remote.model.Chat
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

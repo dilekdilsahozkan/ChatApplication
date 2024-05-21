@@ -1,6 +1,7 @@
 package com.example.chatapplication.data
 
 import android.graphics.Bitmap
+import com.example.chatapplication.data.remote.model.Chat
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.Dispatchers
@@ -9,7 +10,7 @@ import kotlinx.coroutines.withContext
 object ChatData {
     val api_key="AIzaSyCuI7YQJEZJznAd1gWu6hikrCA6tnu4Tlc"
 
-    suspend fun getReponse(prompt: String) : com.example.chatapplication.data.Chat {
+    suspend fun getReponse(prompt: String) :Chat {
         val generativeModel = GenerativeModel(
             modelName = "gemini-pro", apiKey = api_key
         )
@@ -17,7 +18,7 @@ object ChatData {
             val response = withContext(Dispatchers.IO){
                 generativeModel.generateContent(prompt)
             }
-            return com.example.chatapplication.data.Chat(
+            return Chat(
                 prompt= response.text ?:"error",
                 bitmap = null,
                 isFromUser = false
@@ -25,7 +26,7 @@ object ChatData {
         }
 
         catch (e:Exception){
-            return com.example.chatapplication.data.Chat(
+            return Chat(
                 prompt= e.message?:"error",
                 bitmap = null,
                 isFromUser = false
@@ -33,7 +34,7 @@ object ChatData {
         }
     }
 
-    suspend fun getReponse(prompt: String, bitmap: Bitmap) : com.example.chatapplication.data.Chat {
+    suspend fun getReponse(prompt: String, bitmap: Bitmap) : Chat {
         val generativeModel = GenerativeModel(
             modelName = "gemini-pro-vision", apiKey = api_key
         )
@@ -45,14 +46,14 @@ object ChatData {
             val response = withContext(Dispatchers.IO){
                 generativeModel.generateContent(inputContent)
             }
-            return com.example.chatapplication.data.Chat(
+            return Chat(
                 prompt= response.text ?:"error",
                 bitmap = null,
                 isFromUser = false
             )
         }
         catch (e:Exception){
-            return com.example.chatapplication.data.Chat(
+            return Chat(
                 prompt= e.message?:"error",
                 bitmap = null,
                 isFromUser = false

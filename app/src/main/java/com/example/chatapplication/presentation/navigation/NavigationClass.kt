@@ -1,4 +1,4 @@
-package com.example.chatapplication.base
+package com.example.chatapplication.presentation.navigation
 
 import androidx.navigation.NavHostController
 
