@@ -1,4 +1,4 @@
-package com.example.chatapplication.presentation.ui.recipe_screen
+package com.example.chatapplication.presentation.ui.recipe_list_screen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
