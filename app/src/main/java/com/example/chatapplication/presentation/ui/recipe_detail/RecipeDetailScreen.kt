@@ -2,7 +2,6 @@ package com.example.chatapplication.presentation.ui.recipe_detail
 
 import androidx.compose.runtime.Composable
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,8 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,23 +21,22 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.chatapplication.R
-import com.example.chatapplication.base.ViewState
-import com.example.chatapplication.data.remote.model.Recipe
 import com.example.chatapplication.data.remote.model.RecipeDetail
 import com.example.chatapplication.presentation.viewmodel.RecipeViewModel
 import com.example.chatapplication.ui.theme.Gray
 import com.example.chatapplication.ui.theme.LightGray
 import com.example.chatapplication.ui.theme.Pink
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.chatapplication.ui.theme.mediumFont
+import com.example.chatapplication.ui.theme.regular
+import com.example.chatapplication.ui.theme.semibold
 import kotlin.math.max
 import kotlin.math.min
 
@@ -68,16 +64,17 @@ fun RecipeDetailScreen(
 
 @Composable
 fun RecipeDetailTopBar(recipe: RecipeDetail, scrollState: LazyListState, navController: NavController) {
-    val imageHeight = 344.dp
+    val imageHeight = 294.dp
     val maxOffset = with(LocalDensity.current) { imageHeight.roundToPx() }
     val offset = min(scrollState.firstVisibleItemScrollOffset, maxOffset)
     val offsetProgress = max(0f, offset * 3f - 2f * maxOffset) / maxOffset
 
     Box(
         modifier = Modifier
-            .height(400.dp)
+            .height(350.dp)
             .offset { IntOffset(x = 0, y = -offset) }
             .background(Color.White)
+
     ) {
         Column {
             Box(
@@ -85,24 +82,25 @@ fun RecipeDetailTopBar(recipe: RecipeDetail, scrollState: LazyListState, navCont
                     .height(imageHeight)
                     .graphicsLayer { alpha = 1f - offsetProgress }
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.strawberry_pie_1),
+                AsyncImage(
+                    model = recipe.imageUrl,
                     contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .padding(top = 10.dp),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = recipe.name.toString(),
-                    fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
+                    text = recipe.name.toString().lowercase()
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() },
+                    fontSize = 20.sp,
+                    fontFamily = semibold,
                     modifier = Modifier
                         .padding(horizontal = (16 + 28 * offsetProgress).dp)
                         .scale(1f - 0.25f * offsetProgress)
@@ -124,7 +122,7 @@ fun RecipeDetailTopBar(recipe: RecipeDetail, scrollState: LazyListState, navCont
                     navController.navigate("recipe")
                 },
                 modifier = Modifier
-                    .padding(end = 10.dp)
+                    .padding(top = 10.dp, end = 10.dp)
                     .size(48.dp)
                     .background(
                         Color("#F9D8D8".toColorInt()),
@@ -143,11 +141,11 @@ fun RecipeDetailTopBar(recipe: RecipeDetail, scrollState: LazyListState, navCont
 
 @Composable
 fun RecipeDetailContent(recipe: RecipeDetail, scrollState: LazyListState) {
-    LazyColumn(contentPadding = PaddingValues(top = 400.dp), state = scrollState) {
+    LazyColumn(contentPadding = PaddingValues(top = 350.dp), state = scrollState) {
         item {
             BasicInfo(recipe)
             IngredientsHeader()
-            //    IngredientsList(recipe)
+            IngredientsList(recipe)
             Steps(recipe)
         }
     }
@@ -160,14 +158,13 @@ fun BasicInfo(recipe: RecipeDetail) {
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
     ) {
         InfoColumn(
             iconResource = R.drawable.ic_clock,
-            text = recipe.totalTime.toString())
+            text =  if (recipe.totalTime.isNullOrBlank()) "-" else recipe.makingAmount.toString())
         InfoColumn(
             iconResource = R.drawable.ic_star,
-            text = recipe.makingAmount.toString())
+            text =  if (recipe.makingAmount.isNullOrBlank()) "-" else recipe.makingAmount.toString())
     }
 }
 
@@ -175,16 +172,15 @@ fun BasicInfo(recipe: RecipeDetail) {
 fun IngredientsHeader() {
     Row(
         modifier = Modifier
-            .padding(horizontal = 125.dp, vertical = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 10.dp)
             .clip(medium)
             .background(LightGray)
-            .width(180.dp)
-            .height(44.dp)
     ) {
         Text(
             text = "Ingredients",
             color = Color("#E23E3E".toColorInt()),
-            fontSize = 25.sp,
+            fontSize = 20.sp,
+            fontFamily = mediumFont,
             textAlign = TextAlign.Start
         )
     }
@@ -194,64 +190,63 @@ fun IngredientsHeader() {
 fun Steps(recipe: RecipeDetail) {
 
     Column(
-        modifier = Modifier.fillMaxHeight(),
+        modifier = Modifier.fillMaxHeight()
+            .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Text(
             text = "Construction",
             color = Color("#E23E3E".toColorInt()),
-            fontSize = 25.sp,
+            fontSize = 20.sp,
+            fontFamily = mediumFont,
             textAlign = TextAlign.Start,
         )
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(16.dp),
+                .padding(top =16.dp),
             shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(
                 containerColor = LightGray
             )
         ) {
             Text(
-                text = recipe.description.toString(),
+                text = recipe.directions.toString(),
                 textAlign = TextAlign.Start,
-                modifier = Modifier.padding(5.dp)
+                fontFamily = regular
             )
         }
     }
 }
 
-    /*
 @Composable
 fun IngredientsList(recipe: RecipeDetail) {
-    EasyGrid(nColumns = 3, items = recipe.ingredients.subList()) {
-        IngredientCard(it.toString(), Modifier)
+    EasyGrid(nColumns = 3, items = recipe.ingredients ?: emptyList()) {
+        IngredientCard(it, Modifier)
     }
 }
-
 
 @Composable
 fun IngredientCard(
     name: String,
     modifier: Modifier
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Card(
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(Color("#F9D8D8".toColorInt())),
         modifier = modifier.padding(bottom = 16.dp)
-    ) {
-        Text(
-            text = name,
-            modifier = Modifier.width(100.dp),
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Center
-
-
+        .size(115.dp)
+        ) {
+            Text(
+                text = name,
+                modifier = Modifier.width(100.dp),
+                fontSize = 13.sp,
+                fontFamily = mediumFont,
+                textAlign = TextAlign.Center
         )
     }
 }
-*/
 
 @Composable
 fun <T> EasyGrid(nColumns: Int, items: List<T>, content: @Composable (T) -> Unit) {
@@ -284,7 +279,7 @@ fun InfoColumn(@DrawableRes iconResource: Int, text: String) {
             tint = Pink,
             modifier = Modifier.height(50.dp)
         )
-        Text(text = text, fontWeight = FontWeight.Bold)
+        Text(text = text, fontFamily = mediumFont)
     }
 }
 
