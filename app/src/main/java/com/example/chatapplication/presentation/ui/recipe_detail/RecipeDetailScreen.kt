@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,9 +33,12 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.chatapplication.R
+import com.example.chatapplication.base.ViewState
 import com.example.chatapplication.data.remote.model.RecipeDetail
 import com.example.chatapplication.presentation.viewmodel.RecipeViewModel
 import com.example.chatapplication.ui.theme.LightGray
@@ -50,18 +54,25 @@ val medium: CornerBasedShape = RoundedCornerShape(4.dp)
 @Composable
 fun RecipeDetailScreen(
     navController: NavController,
-    recipeDetail: RecipeDetail,
-    viewModel: RecipeViewModel) {
-
+    recipeId: Int?,
+    viewModel: RecipeViewModel = hiltViewModel()
+) {
     val scrollState = rememberLazyListState()
+    val detailState by viewModel.detailState.collectAsStateWithLifecycle()
 
-   /* LaunchedEffect(recipeDetail.recipeId) {
-        recipeDetail.recipeId?.let { viewModel.getRecipeDetail(it) }
-    }*/
+    LaunchedEffect(recipeId) {
+        recipeId?.let { viewModel.getRecipeDetail(it) }
+    }
 
-    Box {
-        RecipeDetailContent(recipeDetail, scrollState)
-        RecipeDetailTopBar(recipeDetail, scrollState, navController)
+    Row {
+        if (detailState is ViewState.Success) {
+            val recipeDetail: RecipeDetail =
+                (detailState as ViewState.Success<RecipeDetail>).data
+
+
+            RecipeDetailContent(recipeDetail, scrollState)
+            RecipeDetailTopBar(recipeDetail, scrollState, navController)
+        }
     }
 }
 
@@ -296,6 +307,3 @@ fun InfoColumn(@DrawableRes iconResource: Int, text: String) {
         Text(text = text, fontFamily = mediumFont)
     }
 }
-
-
-

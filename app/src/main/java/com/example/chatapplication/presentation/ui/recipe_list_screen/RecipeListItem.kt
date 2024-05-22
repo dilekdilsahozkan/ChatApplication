@@ -39,7 +39,7 @@ fun RecipeListItem(
             .fillMaxSize()
             .padding(16.dp)
             .clickable {
-                navController.navigate("recipe_detail" + "/{${recipe.recipeId}}") },
+                navController.navigate("recipe_detail/${recipe.recipeId}") },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

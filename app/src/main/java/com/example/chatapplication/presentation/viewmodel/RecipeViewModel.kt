@@ -27,7 +27,6 @@ class RecipeViewModel @Inject constructor(private val recipeUseCase: RecipeUseCa
 
     init{
         getRecipe()
-        getRecipeDetail(6)
     }
 
     fun getRecipe() {
