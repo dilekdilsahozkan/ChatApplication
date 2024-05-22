@@ -20,13 +20,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import androidx.navigation.NavController
+import com.example.chatapplication.ui.theme.regular
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatTopAppBar(navController: NavController) {
     TopAppBar(
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
-        title = { Text(text = "Chat", fontWeight = FontWeight.Bold) },
+        title = { Text(text = "Chat", fontFamily = regular) },
         colors = TopAppBarDefaults.topAppBarColors(Color.Transparent),
         navigationIcon = {
             IconButton(
