@@ -25,10 +25,6 @@ class RecipeViewModel @Inject constructor(private val recipeUseCase: RecipeUseCa
     var _detailState: MutableStateFlow<ViewState<RecipeDetail>> = MutableStateFlow(ViewState.Idle())
     val detailState: StateFlow<ViewState<RecipeDetail>> = _detailState
 
-    init{
-        getRecipe()
-    }
-
     fun getRecipe() {
         viewModelScope.launch {
             recipeUseCase.getRecipe()

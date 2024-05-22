@@ -21,12 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.chatapplication.ui.theme.Gray
 
 @Composable
 fun GoogleLoadingIndicator(
     modifier: Modifier = Modifier,
     dotSize: Dp = 5.dp,
-    dotColor: Color = Color.Gray,
+    dotColor: Color = Gray,
     animationDelay: Int = 200
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "")

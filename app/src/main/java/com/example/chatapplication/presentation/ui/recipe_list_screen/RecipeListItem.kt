@@ -24,7 +24,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.chatapplication.base.ItemCustomText
 import com.example.chatapplication.data.remote.model.RecipeDetail
-import com.example.chatapplication.ui.theme.customRed
+import com.example.chatapplication.ui.theme.Black
+import com.example.chatapplication.ui.theme.SecondaryColor
 import com.example.chatapplication.ui.theme.itemText
 import com.example.chatapplication.ui.theme.semibold
 
@@ -78,24 +79,24 @@ fun RecipeListItem(
             ) {
                 ItemCustomText(
                     text = "Making amount: ",
-                    style = itemText(color = customRed, fontSize = 12.sp),
+                    style = itemText(color = SecondaryColor, fontSize = 12.sp),
                     modifier = Modifier
                 )
                 ItemCustomText(
                     text =
                     if (recipe.makingAmount.isNullOrBlank()) "-" else recipe.makingAmount.toString(),
-                    style = itemText(color = Color.Black, fontSize = 12.sp),
+                    style = itemText(color = Black, fontSize = 12.sp),
                     modifier = Modifier
                 )
                 ItemCustomText(
                     text = "Making time: ",
-                    style = itemText(color = customRed, fontSize = 12.sp),
+                    style = itemText(color = SecondaryColor, fontSize = 12.sp),
                     modifier = Modifier
                 )
                 ItemCustomText(
                     text =
                     if (recipe.totalTime.isNullOrBlank()) "-" else recipe.totalTime.toString(),
-                    style = itemText(color = Color.Black, fontSize = 12.sp),
+                    style = itemText(color = Black, fontSize = 12.sp),
                     modifier = Modifier
                 )
             }

@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
@@ -32,7 +31,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -41,8 +39,9 @@ import com.example.chatapplication.R
 import com.example.chatapplication.base.ViewState
 import com.example.chatapplication.data.remote.model.RecipeDetail
 import com.example.chatapplication.presentation.viewmodel.RecipeViewModel
-import com.example.chatapplication.ui.theme.LightGray
-import com.example.chatapplication.ui.theme.Pink
+import com.example.chatapplication.ui.theme.MainColor
+import com.example.chatapplication.ui.theme.SecondaryColor
+import com.example.chatapplication.ui.theme.White
 import com.example.chatapplication.ui.theme.mediumFont
 import com.example.chatapplication.ui.theme.regular
 import com.example.chatapplication.ui.theme.semibold
@@ -64,7 +63,7 @@ fun RecipeDetailScreen(
         recipeId?.let { viewModel.getRecipeDetail(it) }
     }
 
-    Row {
+    Box {
         if (detailState is ViewState.Success) {
             val recipeDetail: RecipeDetail =
                 (detailState as ViewState.Success<RecipeDetail>).data
@@ -87,7 +86,7 @@ fun RecipeDetailTopBar(recipe: RecipeDetail, scrollState: LazyListState, navCont
         modifier = Modifier
             .height(350.dp)
             .offset { IntOffset(x = 0, y = -offset) }
-            .background(Color.White)
+            .background(White)
 
     ) {
         Column {
@@ -139,14 +138,14 @@ fun RecipeDetailTopBar(recipe: RecipeDetail, scrollState: LazyListState, navCont
                     .padding(top = 10.dp, end = 10.dp)
                     .size(48.dp)
                     .background(
-                        Color("#F9D8D8".toColorInt()),
+                        MainColor,
                         shape = RoundedCornerShape(16.dp)
                     )
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "RecipeTopBar Page",
-                    tint = Color("#E23E3E".toColorInt())
+                    tint = SecondaryColor
                 )
             }
         }
@@ -172,6 +171,7 @@ fun BasicInfo(recipe: RecipeDetail) {
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxWidth()
+            .background(White)
     ) {
         InfoColumn(
             iconResource = R.drawable.ic_clock,
@@ -188,11 +188,11 @@ fun IngredientsHeader() {
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 10.dp)
             .clip(medium)
-            .background(LightGray)
+            .background(White)
     ) {
         Text(
             text = "Ingredients",
-            color = Color("#E23E3E".toColorInt()),
+            color = SecondaryColor,
             fontSize = 20.sp,
             fontFamily = mediumFont,
             textAlign = TextAlign.Start
@@ -205,12 +205,13 @@ fun Steps(recipe: RecipeDetail) {
 
     Column(
         modifier = Modifier.fillMaxHeight()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .background(White),
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Text(
             text = "Construction",
-            color = Color("#E23E3E".toColorInt()),
+            color = SecondaryColor,
             fontSize = 20.sp,
             fontFamily = mediumFont,
             textAlign = TextAlign.Start,
@@ -222,7 +223,7 @@ fun Steps(recipe: RecipeDetail) {
                 .padding(top =16.dp),
             shape = RoundedCornerShape(10.dp),
             colors = CardDefaults.cardColors(
-                containerColor = LightGray
+                containerColor = White
             )
         ) {
             Text(
@@ -250,10 +251,11 @@ fun IngredientCard(
 
     Card(
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
-        colors = CardDefaults.cardColors(Color("#F9D8D8".toColorInt())),
+        colors = CardDefaults.cardColors(MainColor),
         modifier = modifier
             .padding(bottom = 16.dp, start = 4.dp, end = 4.dp)
             .aspectRatio(1f)
+            .background(White)
             .clickable { expanded = !expanded } // Tıklama ile genişlet/daralt
     ) {
         Column(
@@ -301,7 +303,7 @@ fun InfoColumn(@DrawableRes iconResource: Int, text: String) {
         Icon(
             painter = painterResource(id = iconResource),
             contentDescription = null,
-            tint = Pink,
+            tint = SecondaryColor,
             modifier = Modifier.height(50.dp)
         )
         Text(text = text, fontFamily = mediumFont)

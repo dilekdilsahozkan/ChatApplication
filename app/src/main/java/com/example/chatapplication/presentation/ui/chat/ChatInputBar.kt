@@ -42,6 +42,10 @@ import com.example.chatapplication.R
 import com.example.chatapplication.base.ChatState
 import com.example.chatapplication.data.ChatUiEvent
 import com.example.chatapplication.presentation.viewmodel.ChatViewModel
+import com.example.chatapplication.ui.theme.Black
+import com.example.chatapplication.ui.theme.MainColor
+import com.example.chatapplication.ui.theme.SecondaryColor
+import com.example.chatapplication.ui.theme.White
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -54,7 +58,7 @@ fun ChatInputBar(
     chatViewModel: ChatViewModel,
     onImageClear: () -> Unit,
 ) {
-    ProvideTextStyle(TextStyle(color = Color.Black)) {
+    ProvideTextStyle(TextStyle(Black)) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -90,7 +94,7 @@ fun ChatInputBar(
                             Icon(
                                 imageVector = Icons.Default.Cancel,
                                 contentDescription = "Clear Image",
-                                tint = Color.White
+                                tint = White
                             )
                         }
                     }
@@ -103,13 +107,11 @@ fun ChatInputBar(
                     value = chatState.prompt,
                 onValueChange = { chatViewModel.onEvent(ChatUiEvent.UpdatePrompt(it)) },
                 colors = TextFieldDefaults.colors(
-                    unfocusedContainerColor = Color("#F9D8D8".toColorInt()),
-                    unfocusedIndicatorColor = Color("#F9D8D8".toColorInt()),
-                    focusedContainerColor = Color("#F9D8D8".toColorInt()),
-                    focusedIndicatorColor = Color("#F9D8D8".toColorInt()),
-                    disabledIndicatorColor = Color(
-                        "#F9D8D8".toColorInt()
-                    )
+                    unfocusedContainerColor = MainColor,
+                    unfocusedIndicatorColor = MainColor,
+                    focusedContainerColor = MainColor,
+                    focusedIndicatorColor = MainColor,
+                    disabledIndicatorColor = MainColor
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                 keyboardActions = KeyboardActions(
@@ -129,13 +131,13 @@ fun ChatInputBar(
                             )
                         },
                         modifier = Modifier
-                            .background(color = Color("#F9D8D8".toColorInt()))
+                            .background(MainColor)
                             .size(30.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.camera),
                             contentDescription = "Camera",
-                            tint = Color("#E23E3E".toColorInt()),
+                            tint = SecondaryColor,
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -148,13 +150,13 @@ fun ChatInputBar(
                         },
                         modifier = Modifier
                             .clip(CircleShape)
-                            .background(color = Color("#F9D8D8".toColorInt()))
+                            .background(MainColor)
                             .size(24.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.doubleright),
                             contentDescription = "Send",
-                            tint = Color("#E23E3E".toColorInt())
+                            tint = SecondaryColor
                         )
                     }
                 }

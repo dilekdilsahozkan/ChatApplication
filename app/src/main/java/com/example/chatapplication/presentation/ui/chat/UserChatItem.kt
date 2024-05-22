@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
+import com.example.chatapplication.ui.theme.Black
 import com.example.chatapplication.ui.theme.regular
 
 // kullanıcı mesajı
@@ -66,7 +67,7 @@ fun UserChatItem(prompt: String, bitmap: Bitmap?) {
                         modifier = Modifier.padding(top = 4.dp),
                         text = prompt,
                         fontFamily = regular,
-                        color = Color.Black,
+                        color = Black,
                     )
                 }
             }

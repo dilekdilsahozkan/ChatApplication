@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,7 +19,6 @@ import com.example.chatapplication.data.remote.model.Recipe
 import com.example.chatapplication.data.remote.model.RecipeDetail
 import com.example.chatapplication.presentation.viewmodel.RecipeViewModel
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun RecipeScreen(
     navController: NavController,
@@ -27,17 +27,22 @@ fun RecipeScreen(
 
     val uiState by viewModel.recipeState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.getRecipe()
+    }
+
     Scaffold(
         topBar = {
             RecipeTopBar()
             Spacer(modifier = Modifier.height(12.dp))
         }
-    )
-    {
+    ) { paddingValues ->
         if (uiState is ViewState.Success) {
             val recipes: List<RecipeDetail> =
                 (uiState as ViewState.Success<Recipe>).data.items ?: emptyList()
-            LazyColumn {
+            LazyColumn(
+                contentPadding = paddingValues
+            ) {
                 items(recipes) { recipe ->
                     RecipeListItem(
                         recipe = recipe,

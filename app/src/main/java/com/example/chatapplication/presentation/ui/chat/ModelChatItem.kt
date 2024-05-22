@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
+import com.example.chatapplication.ui.theme.Black
+import com.example.chatapplication.ui.theme.Gray
 import com.example.chatapplication.ui.theme.regular
 
 // chat bot mesaj balonu
@@ -29,7 +31,7 @@ fun ModelChatItem(response: String, isLoading: Boolean) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .background(
-                    color = Color("#F1F1F1".toColorInt()),
+                    color = Gray,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .padding(12.dp)
@@ -40,7 +42,7 @@ fun ModelChatItem(response: String, isLoading: Boolean) {
                 Text(
                     text = response,
                     fontFamily = regular,
-                    color = Color.Black
+                    color = Black
                 )
             }
         }

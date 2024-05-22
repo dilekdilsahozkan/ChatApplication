@@ -26,5 +26,5 @@ val mediumFont: FontFamily = FontFamily(Font(R.font.poppins_medium, weight = Fon
 val semibold: FontFamily = FontFamily(Font(R.font.poppins_semibold, weight = FontWeight.Bold))
 val regular: FontFamily = FontFamily(Font(R.font.poppins_regular, weight = FontWeight.Normal))
 
-fun itemText(color: Color = Color.Black, fontFamily: FontFamily = mediumFont, fontSize: TextUnit) =
+fun itemText(color: Color = Black, fontFamily: FontFamily = mediumFont, fontSize: TextUnit) =
     TextStyle(color = color, fontFamily = fontFamily, fontSize = fontSize)

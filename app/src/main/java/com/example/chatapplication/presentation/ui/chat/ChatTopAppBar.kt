@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import androidx.navigation.NavController
 import com.example.chatapplication.presentation.viewmodel.ChatViewModel
+import com.example.chatapplication.ui.theme.MainColor
+import com.example.chatapplication.ui.theme.SecondaryColor
 import com.example.chatapplication.ui.theme.regular
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,14 +42,14 @@ fun ChatTopAppBar(navController: NavController, viewModel: ChatViewModel) {
                     .padding(end = 10.dp)
                     .size(48.dp)
                     .background(
-                        Color("#F9D8D8".toColorInt()),
+                        MainColor,
                         shape = RoundedCornerShape(16.dp)
                     )
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Recipe Page",
-                    tint = Color("#E23E3E".toColorInt())
+                    tint = SecondaryColor
                 )
             }
         },
@@ -57,14 +59,14 @@ fun ChatTopAppBar(navController: NavController, viewModel: ChatViewModel) {
                 modifier = Modifier
                     .size(48.dp)
                     .background(
-                        Color("#F9D8D8".toColorInt()),
+                        MainColor,
                         shape = RoundedCornerShape(16.dp)
                     )
             ) {
                 Icon(
                     Icons.Default.Notifications,
                     contentDescription = "Notification",
-                    tint = Color("#E23E3E".toColorInt())
+                    tint = SecondaryColor
                 )
             }
         },
