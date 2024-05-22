@@ -20,11 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import androidx.navigation.NavController
+import com.example.chatapplication.presentation.viewmodel.ChatViewModel
 import com.example.chatapplication.ui.theme.regular
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatTopAppBar(navController: NavController) {
+fun ChatTopAppBar(navController: NavController, viewModel: ChatViewModel) {
     TopAppBar(
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
         title = { Text(text = "Chat", fontFamily = regular) },
@@ -52,7 +53,7 @@ fun ChatTopAppBar(navController: NavController) {
         },
         actions = {
             IconButton(
-                onClick = { /* Buton Click iceriği */ },
+                onClick = { viewModel.clearMessages() },
                 modifier = Modifier
                     .size(48.dp)
                     .background(

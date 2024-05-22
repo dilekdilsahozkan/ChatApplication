@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+
 class ChatViewModel : ViewModel() {
     private val _chatState = MutableStateFlow(ChatState())
     val chatState = _chatState.asStateFlow()
@@ -108,5 +109,10 @@ class ChatViewModel : ViewModel() {
             }
             isLoading.value = false
         }
+    }
+
+    fun clearMessages() {
+        // Mesajları temizle
+        _chatState.update { it.copy(chatList = emptyList<Chat>().toMutableList()) }
     }
 }
