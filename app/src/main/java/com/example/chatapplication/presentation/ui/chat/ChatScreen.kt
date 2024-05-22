@@ -54,7 +54,7 @@ fun ChatScreen(
     val bitmap = getBitmap(uriState)
 
     Scaffold(
-        topBar = { ChatTopAppBar(navController) },
+        topBar = { ChatTopAppBar(navController, chatViewModel) },
         bottomBar = {
             ChatInputBar(
                 bitmap,
