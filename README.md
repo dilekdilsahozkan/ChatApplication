@@ -42,3 +42,4 @@ dilekdilsah21@gmail.com <br>
 sudekarakus@gmail.com <br>
 cagataykayakiran@gmail.com <br>
 mertuludag2338@gmail.com <br>
+zeynepasllan@gmail.com
