@@ -3,6 +3,7 @@ package com.example.chatapplication.presentation.ui.recipe_detail
 import androidx.compose.runtime.Composable
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -12,6 +13,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,7 +37,6 @@ import coil.compose.AsyncImage
 import com.example.chatapplication.R
 import com.example.chatapplication.data.remote.model.RecipeDetail
 import com.example.chatapplication.presentation.viewmodel.RecipeViewModel
-import com.example.chatapplication.ui.theme.Gray
 import com.example.chatapplication.ui.theme.LightGray
 import com.example.chatapplication.ui.theme.Pink
 import com.example.chatapplication.ui.theme.mediumFont
@@ -40,9 +45,7 @@ import com.example.chatapplication.ui.theme.semibold
 import kotlin.math.max
 import kotlin.math.min
 
-val small: CornerBasedShape = RoundedCornerShape(4.dp)
 val medium: CornerBasedShape = RoundedCornerShape(4.dp)
-val large: CornerBasedShape = RoundedCornerShape(0.dp)
 
 @Composable
 fun RecipeDetailScreen(
@@ -230,21 +233,32 @@ fun IngredientsList(recipe: RecipeDetail) {
 @Composable
 fun IngredientCard(
     name: String,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
+    var expanded by remember { mutableStateOf(false) }
+
     Card(
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(Color("#F9D8D8".toColorInt())),
-        modifier = modifier.padding(bottom = 16.dp)
-        .size(115.dp)
+        modifier = modifier
+            .padding(bottom = 16.dp, start = 4.dp, end = 4.dp)
+            .aspectRatio(1f)
+            .clickable { expanded = !expanded } // Tıklama ile genişlet/daralt
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
         ) {
             Text(
                 text = name,
-                modifier = Modifier.width(100.dp),
                 fontSize = 13.sp,
                 fontFamily = mediumFont,
-                textAlign = TextAlign.Center
-        )
+                textAlign = TextAlign.Center,
+                maxLines = if (expanded) Int.MAX_VALUE else 3, // Genişletilmişse satır sınırı yok
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
 
@@ -284,26 +298,4 @@ fun InfoColumn(@DrawableRes iconResource: Int, text: String) {
 }
 
 
-@Composable
-fun CircularButton(
-    @DrawableRes iconResource: Int,
-    color: Color = Gray,
-    elevation: ButtonElevation? = ButtonDefaults.buttonElevation(),
-    onClick: () -> Unit = {}
-) {
-    Button(
-        onClick = onClick,
-        contentPadding = PaddingValues(),
-        shape = small,
-        colors = ButtonDefaults.buttonColors(
-            contentColor = color,
-            containerColor = Color.White
-        ),
-        elevation = elevation,
-        modifier = Modifier
-            .width(38.dp)
-            .height(38.dp)
-    ) {
-        Icon(painterResource(id = iconResource), contentDescription = null)
-    }
-}
+
