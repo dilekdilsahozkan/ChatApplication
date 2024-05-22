@@ -49,8 +49,7 @@ class MainActivity : ComponentActivity() {
     setContent {
       val navController = rememberNavController()
 
-      ChatApplicationTheme {
-
+      ChatApplicationTheme(darkTheme = false) {
         Surface(
           modifier = Modifier.fillMaxSize(),
           color = MaterialTheme.colorScheme.background,

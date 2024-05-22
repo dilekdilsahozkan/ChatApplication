@@ -1,6 +1,7 @@
 package com.example.chatapplication.data
 
 import android.graphics.Bitmap
+import com.example.chatapplication.BuildConfig
 import com.example.chatapplication.data.remote.model.Chat
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
@@ -8,9 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 object ChatData {
-    val api_key="AIzaSyCuI7YQJEZJznAd1gWu6hikrCA6tnu4Tlc"
+    private const val api_key = BuildConfig.apiKey
 
-    suspend fun getReponse(prompt: String) :Chat {
+    suspend fun getResponse(prompt: String) :Chat {
         val generativeModel = GenerativeModel(
             modelName = "gemini-pro", apiKey = api_key
         )
@@ -34,7 +35,7 @@ object ChatData {
         }
     }
 
-    suspend fun getReponse(prompt: String, bitmap: Bitmap) : Chat {
+    suspend fun getResponse(prompt: String, bitmap: Bitmap) : Chat {
         val generativeModel = GenerativeModel(
             modelName = "gemini-pro-vision", apiKey = api_key
         )

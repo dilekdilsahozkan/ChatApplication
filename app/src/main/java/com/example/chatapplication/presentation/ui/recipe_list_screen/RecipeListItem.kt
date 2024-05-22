@@ -15,7 +15,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,7 +37,7 @@ fun RecipeListItem(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp )
             .clickable {
                 navController.navigate("recipe_detail/${recipe.recipeId}") },
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,12 +69,11 @@ fun RecipeListItem(
                 style = itemText(fontFamily = semibold, fontSize = 16.sp),
                 modifier = Modifier
             )
+
             Spacer(modifier = Modifier.height(8.dp))
+
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 ItemCustomText(
                     text = "Making amount: ",
@@ -88,6 +86,11 @@ fun RecipeListItem(
                     style = itemText(color = Black, fontSize = 12.sp),
                     modifier = Modifier
                 )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
                 ItemCustomText(
                     text = "Making time: ",
                     style = itemText(color = SecondaryColor, fontSize = 12.sp),
@@ -99,6 +102,7 @@ fun RecipeListItem(
                     style = itemText(color = Black, fontSize = 12.sp),
                     modifier = Modifier
                 )
+               }
             }
         }
     }

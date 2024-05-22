@@ -256,7 +256,7 @@ fun IngredientCard(
             .padding(bottom = 16.dp, start = 4.dp, end = 4.dp)
             .aspectRatio(1f)
             .background(White)
-            .clickable { expanded = !expanded } // Tıklama ile genişlet/daralt
+            .clickable { expanded = !expanded }
     ) {
         Column(
             modifier = Modifier
@@ -268,7 +268,7 @@ fun IngredientCard(
                 fontSize = 13.sp,
                 fontFamily = mediumFont,
                 textAlign = TextAlign.Center,
-                maxLines = if (expanded) Int.MAX_VALUE else 3, // Genişletilmişse satır sınırı yok
+                maxLines = if (expanded) Int.MAX_VALUE else 4,
                 overflow = TextOverflow.Ellipsis
             )
         }

@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-
 class ChatViewModel : ViewModel() {
     private val _chatState = MutableStateFlow(ChatState())
     val chatState = _chatState.asStateFlow()
@@ -76,7 +75,7 @@ class ChatViewModel : ViewModel() {
                     }
                 )
             }
-            val response = ChatData.getReponse(prompt)
+            val response = ChatData.getResponse(prompt)
             _chatState.update {
                 it.copy(
                     chatList = it.chatList.toMutableList().apply {
@@ -99,7 +98,7 @@ class ChatViewModel : ViewModel() {
                     }
                 )
             }
-            val response = ChatData.getReponse(prompt, bitmap)
+            val response = ChatData.getResponse(prompt, bitmap)
             _chatState.update {
                 it.copy(
                     chatList = it.chatList.toMutableList().apply {
