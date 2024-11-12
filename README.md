@@ -33,7 +33,7 @@ After starting the application, real-time messaging with AI begins. Users can sh
 <img src="https://github.com/dilekdilsahozkan/ChatApplication/assets/95809835/0fa80c4d-888b-4c20-9554-683ea57eb41c" alt="Visual 4" width="200">
 
 ## Development
-It is recommended to use the latest version of Android Studio for development. The code is written in Kotlin and managed with Gradle.
+It is recommended to use the latest version of Android Studio for development. The code is written in Kotlin and managed with Gradle..
 
 ## Contact
 If you have any questions, please contact us at: <br>
